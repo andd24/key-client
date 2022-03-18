@@ -10,7 +10,7 @@ export const NavBar = () => {
 
 
   useEffect(() => {
-    if(localStorage.getItem('rare_token')){
+    if(localStorage.getItem('key_token')){
       getCurrentUser().then(setCurrentUser)
     }
   }, [])
@@ -40,21 +40,9 @@ export const NavBar = () => {
             localStorage.getItem('key_token')
               ?
               <>
-                <Link to="/posts" className="navbar-item has-text-weight-semibold">Posts</Link>
-                <Link to="/my-posts" className="navbar-item has-text-weight-semibold">My Posts</Link>
-                <Link to="/newpost" className="navbar-item has-text-weight-semibold">New Post</Link>
-                {
-                  currentUser.user?.is_staff ? <Link to="/tags" className="navbar-item has-text-weight-semibold">Tag Management</Link> : ""
-                }
-                {
-                  currentUser.user?.is_staff ? <Link to="/categories" className="navbar-item has-text-weight-semibold">Category Management</Link> : ""
-                }
-                {
-                  currentUser.user?.is_staff ? <Link to="/reactions" className="navbar-item has-text-weight-semibold">Reaction Management</Link> : ""
-                }                        
-                {
-                  currentUser.user?.is_staff ? <Link to="/users" className="navbar-item has-text-weight-semibold">User List</Link> : ""
-                }
+                <Link to="/projects" className="navbar-item has-text-weight-semibold">Projects</Link>
+                <Link to="/browse" className="navbar-item has-text-weight-semibold">Browse</Link>
+                <Link to="/org" className="navbar-item has-text-weight-semibold">Organization</Link>
               </>
               :
               ""
@@ -65,10 +53,10 @@ export const NavBar = () => {
           <div className="navbar-item">
             <div className="buttons">
               {
-                localStorage.getItem('rare_token')
+                localStorage.getItem('key_token')
                   ?
                   <button className="button is-outlined" onClick={() => {
-                    localStorage.removeItem('rare_token')
+                    localStorage.removeItem('key_token')
                     history.push('/login')
                   }}>Logout {currentUser.user?.username}</button>
                   :
