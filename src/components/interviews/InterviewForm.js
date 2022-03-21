@@ -4,16 +4,39 @@ import { useHistory } from "react-router-dom"
 import { getFields } from "../fields/FieldManager"
 import { createInterview } from "./InterviewManager"
 import { createProject } from "../projects/ProjectManager"
+import { createQuestion, searchQuestions } from "../questions/QuestionManager"
 
 export const InterviewForm = () => {
     const history = useHistory()
     const { projectId } = useParams()
+    const [questions, setQuestions] = useState([])
+    const [newQuestion, setNewQuestion] = useState("")
+    const [search, setSearch] = useState("")
     const [interview, setInterview] = useState({
         project: projectId,
         subject: "",
         location: "",
-        scheduled_date: ""
+        scheduled_date: "",
+        questionIds: new Set()
     })
+
+    useEffect(() => {
+        if (search !== "") {
+            searchQuestions(search)
+                .then(setQuestions)
+        }
+    }, [search])
+
+    const submitNewQuestion = (evt) => {
+        evt.preventDefault()
+        const newQuestionObject = {
+            question: newQuestion
+        }
+
+        createQuestion(newQuestionObject)
+            .then(() => {setNewQuestion("")})
+            
+    }
 
     const submitNewInterview = (evt) => {
         evt.preventDefault()
@@ -21,7 +44,8 @@ export const InterviewForm = () => {
             project: parseInt(projectId),
             subject: interview.subject,
             location: interview.location,
-            scheduled_date: interview.scheduled_date
+            scheduled_date: interview.scheduled_date,
+            questions: Array.from(interview.questionIds)
         }
 
         createInterview(newInterview)
@@ -87,7 +111,60 @@ export const InterviewForm = () => {
                             } ></textarea>
                     </div>
                 </div>
+                <button>Add Questions</button>
                 <h3>Questions</h3>
+                <div>Search  questions:</div>
+                <div className="panel-block">
+                        <input className="input" type="text"
+                            placeholder="Start typing question here"
+                            name="search"
+                            onKeyUp={
+                                (event) => {
+                                    const copy = event.target.value
+                                    setSearch(copy)
+                                }
+                            } />
+                </div>
+                {questions.map((question) => {
+                    return ( <div key={`question--${question.id}`} className="control my-2">
+                    <label className="checkbox has-text-weight-medium">
+                        <input
+                            type="checkbox"
+                            className="mr-2"
+                            name="question"
+                            value={question.id}
+                            onChange={(evt) => {
+                                const copy = { ...interview }
+                                copy.questionIds.has(parseInt(evt.target.value))
+                                    ? copy.questionIds.delete(parseInt(evt.target.value))
+                                    : copy.questionIds.add(parseInt(evt.target.value))
+                                setInterview(copy)
+                            }} />
+                        {question.question}
+                    </label>
+                </div>
+                    )
+                })}
+                <form>
+                <div className="field my-5">
+                    <label className="label">Add new question</label>
+                    <div className="control">
+                        <input
+                            type="text"
+                            placeholder="type new question here"
+                            className="input"
+                            value={newQuestion}
+                            required autoFocus
+                            onChange={
+                                (evt) => {
+                                    const copy = evt.target.value
+                                    setNewQuestion(copy)
+                                }
+                            } />
+                    </div>
+                </div>
+                <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewQuestion}>Add question</button>
+                </form>
                 <div>
                     <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewInterview}>Submit</button>
                 </div>

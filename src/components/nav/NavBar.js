@@ -42,7 +42,7 @@ export const NavBar = () => {
               <>
                 <Link to="/projects" className="navbar-item has-text-weight-semibold">Projects</Link>
                 <Link to="/browse" className="navbar-item has-text-weight-semibold">Browse</Link>
-                <Link to="/org" className="navbar-item has-text-weight-semibold">Organization</Link>
+                <Link to={`/profile/${currentUser.id}`} className="navbar-item has-text-weight-semibold">Profile</Link>
               </>
               :
               ""

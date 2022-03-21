@@ -6,6 +6,9 @@ import { ProjectDashboard } from "./projects/ProjectDashboard"
 import { ProjectForm } from "./projects/ProjectForm"
 import { Welcome } from "./Welcome"
 import { InterviewForm } from "./interviews/InterviewForm"
+import { PlannedInterview } from "./interviews/PlannedInterview"
+import { UserProfile } from "./users/UserProfile"
+import { InstitutionDetails } from "./institutions/InstitutionDetails"
 
 export const ApplicationViews = () => {
   return (
@@ -27,6 +30,15 @@ export const ApplicationViews = () => {
     </Route>
     <Route path="/projects/new_interview/:projectId(\d+)">
         <InterviewForm />
+    </Route>
+    <Route path="/interview/:interviewId(\d+)">
+        <PlannedInterview />
+    </Route>
+    <Route path="/profile/:userId(\d+)">
+        <UserProfile />
+    </Route>
+    <Route path="/institutions/:institutionId(\d+)">
+        <InstitutionDetails />
     </Route>
     </>
   )

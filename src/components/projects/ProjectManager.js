@@ -41,7 +41,7 @@ export const updateProject = (project, id) => {
 }
 
 export const getProjectsByField = (fieldId) => {
-    return fetch(`http://localhost:8000/projects?category_id=${fieldId}`, {
+    return fetch(`http://localhost:8000/projects?field_id=${fieldId}`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
@@ -65,4 +65,34 @@ export const deleteProject = projectId => {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
     }).then(getProjects)
-};
+}
+
+export const publishProject = (id) => {
+    return fetch(`http://localhost:8000/projects/${id}/publish`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+}
+
+export const unPublishProject = (id) => {
+    return fetch(`http://localhost:8000/projects/${id}/unpublish`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(getSingleProject(id))
+}
+
+export const getPublishedProjects= () => {
+    return fetch(`http://localhost:8000/posts?published=True`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}

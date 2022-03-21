@@ -1,13 +1,13 @@
-export const getInterviews = () => {
-    return fetch("http://localhost:8000/interviews", {
+export const getQuestions = () => {
+    return fetch("http://localhost:8000/questions", {
         headers:{
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
     })
         .then(res => res.json())
 }
-export const getSingleInterview = (id) => {
-    return fetch(`http://localhost:8000/interviews/${id}`, {
+export const getSingleQuestion = (id) => {
+    return fetch(`http://localhost:8000/questions/${id}`, {
         headers:{
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
@@ -15,42 +15,42 @@ export const getSingleInterview = (id) => {
         .then(res => res.json())
 }
 
-export const createInterview = (interview) => {
+export const createQuestion = (question) => {
     const fetchOptions = {
         method: "POST",
         headers: {
             "content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         },
-        body: JSON.stringify(interview)
+        body: JSON.stringify(question)
     }
-    return fetch(`http://localhost:8000/interviews`, fetchOptions)
+    return fetch(`http://localhost:8000/questions`, fetchOptions)
         .then(res => res.json())
 }
 
-export const updateInterview = (interview, id) => {
-    return fetch(`http://localhost:8000/interviews/${id}`, {
+export const updateQuestion = (question, id) => {
+    return fetch(`http://localhost:8000/questions/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         },
-        body: JSON.stringify(interview)
+        body: JSON.stringify(question)
     })
-        .then(getInterviews)
+        .then(getQuestions)
 }
 
-export const deleteInterview = interviewId => {
-    return fetch(`http://localhost:8000/interviews/${interviewId}`, {
+export const deleteQuestion = questionId => {
+    return fetch(`http://localhost:8000/questions/${questionId}`, {
         method: "DELETE",
         headers: {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
-    }).then(getInterviews)
-}
+    }).then(getQuestions)
+};
 
-export const getInterviewsByProject = (projectId) => {
-    return fetch(`http://localhost:8000/interviews?project_id=${projectId}`, {
+export const searchQuestions = (searchTerm) => {
+    return fetch(`http://localhost:8000/questions?q=${searchTerm}`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
