@@ -1,21 +1,36 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useHistory, Link } from "react-router-dom"
-import { createInterview } from "./InterviewManager"
-import { createQuestion, searchQuestions, getQuestionsByProject } from "../questions/QuestionManager"
+import { getSingleInterview, updateInterview } from "./InterviewManager"
+import { getQuestionsByProject, searchQuestions } from "../questions/QuestionManager"
 
-export const InterviewForm = () => {
+export const EditInterviewForm = () => {
     const history = useHistory()
-    const { projectId } = useParams()
+    const { interviewId } = useParams()
     const [questions, setQuestions] = useState([])
     const [search, setSearch] = useState("")
+    const [projectId, setProjectId] = useState("")
     const [interview, setInterview] = useState({
-        project: projectId,
+        project: 0,
         subject: "",
         location: "",
         scheduled_date: "",
-        questionIds: new Set(),
+        questions: new Set(),
         notes: ""
     })
+
+    useEffect(() => {
+        getSingleInterview(interviewId).then((newInterview) => {
+            setInterview({
+                project: newInterview.project.id,
+                subject: newInterview.subject,
+                location: newInterview.location,
+                scheduled_date: newInterview.scheduled_date,
+                questions: new Set(newInterview.questions.map(question => question.id)),
+                notes: newInterview.notes
+            })
+            setProjectId(newInterview.project.id)
+        })
+    }, [interviewId])
 
     useEffect(() => {
         if (search !== "") {
@@ -27,30 +42,30 @@ export const InterviewForm = () => {
         }
     }, [search])
 
-    const submitNewInterview = (evt) => {
+    const editInterview = (evt) => {
         evt.preventDefault()
-        const newInterview = {
-            project: parseInt(projectId),
+        const updatedInterview = {
+            project: projectId,
             subject: interview.subject,
             location: interview.location,
             scheduled_date: interview.scheduled_date,
-            questions: Array.from(interview.questionIds),
+            questions: Array.from(interview.questions),
             notes: interview.notes
         }
 
-        createInterview(newInterview)
-            .then(() => {history.push(`/projects/${projectId}`)})
+        updateInterview(updatedInterview, interviewId)
+            .then(() => {history.push(`/interviews/${interviewId}`)})
             
     }
 
-    const cancelNewInterview = (evt) => {
+    const cancelEdit = (evt) => {
         evt.preventDefault()
-        history.push(`/projects/${projectId}`)
+        history.push(`/interviews/${interviewId}`)
     }
 
     return (
         <div className="container m-6 p-6 has-background-link-light">
-            <h1 className="title is-3">Set up an Interview</h1>
+            <h1 className="title is-3">Edit Interview</h1>
             <form >
                 <h3>Details</h3>
                 <div className="field my-5">
@@ -61,6 +76,7 @@ export const InterviewForm = () => {
                             placeholder="subject name"
                             className="input"
                             required autoFocus
+                            value={interview.subject}
                             onChange={
                                 (evt) => {
                                     const copy = { ...interview }
@@ -77,6 +93,7 @@ export const InterviewForm = () => {
                             type="text"
                             className="input"
                             placeholder="location" 
+                            value={interview.location}
                             onChange={
                                 (evt) => {
                                     const copy = { ...interview }
@@ -92,6 +109,7 @@ export const InterviewForm = () => {
                         <textarea
                             className="textarea"
                             placeholder="scheduled date" 
+                            value={interview.scheduled_date}
                             onChange={
                                 (evt) => {
                                     const copy = { ...interview }
@@ -114,7 +132,7 @@ export const InterviewForm = () => {
                                 }
                             } />
                 </div>
-                { questions.map((question) => {
+                {questions.map((question) => {
                     return ( <div key={`question--${question.id}`} className="control my-2">
                     <label className="checkbox has-text-weight-medium">
                         <input
@@ -122,11 +140,12 @@ export const InterviewForm = () => {
                             className="mr-2"
                             name="question"
                             value={question.id}
+                            checked={interview.questions.has(question.id) ? true : false}
                             onChange={(evt) => {
                                 const copy = { ...interview }
-                                copy.questionIds.has(parseInt(evt.target.value))
-                                    ? copy.questionIds.delete(parseInt(evt.target.value))
-                                    : copy.questionIds.add(parseInt(evt.target.value))
+                                copy.questions.has(parseInt(evt.target.value))
+                                    ? copy.questions.delete(parseInt(evt.target.value))
+                                    : copy.questions.add(parseInt(evt.target.value))
                                 setInterview(copy)
                             }} />
                         {question.question}
@@ -134,12 +153,14 @@ export const InterviewForm = () => {
                 </div>
                     )
                 })}
-                <label className="label">Notes </label>
+                <h3>Notes</h3>
+                <label className="label"></label>
                     <div className="control">
                         <input
                             type="textarea"
                             className="input"
                             placeholder="notes" 
+                            value={interview.notes}
                             onChange={
                                 (evt) => {
                                     const copy = { ...interview }
@@ -150,10 +171,10 @@ export const InterviewForm = () => {
                     </div>
                 <button><Link to={`/projects/${interview.project}/newquestion`}>Manage Questions</Link></button>
                 <div>
-                    <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewInterview}>Submit</button>
+                    <button className="button is-link my-5 has-text-weight-bold" onClick={editInterview}>Save</button>
                 </div>
                 <div>
-                    <button className="button is-link my-5 has-text-weight-bold" onClick={cancelNewInterview}>Cancel</button>
+                    <button className="button is-link my-5 has-text-weight-bold" onClick={cancelEdit}>Cancel</button>
                 </div>
             </form>
         </div>

@@ -9,6 +9,9 @@ import { InterviewForm } from "./interviews/InterviewForm"
 import { PlannedInterview } from "./interviews/PlannedInterview"
 import { UserProfile } from "./users/UserProfile"
 import { InstitutionDetails } from "./institutions/InstitutionDetails"
+import { EditInterviewForm } from "./interviews/EditInterviewForm"
+import { QuestionForm } from "./questions/QuestionForm"
+import { ConductInterviewForm } from "./interviews/ConductInterviewForm"
 
 export const ApplicationViews = () => {
   return (
@@ -25,13 +28,13 @@ export const ApplicationViews = () => {
     <Route path="/projects/new">
         <ProjectForm />
     </Route>
-    <Route path="/projects/:projectId(\d+)">
+    <Route exact path="/projects/:projectId(\d+)">
         <ProjectDetails />
     </Route>
     <Route path="/projects/new_interview/:projectId(\d+)">
         <InterviewForm />
     </Route>
-    <Route path="/interview/:interviewId(\d+)">
+    <Route exact path="/interviews/:interviewId(\d+)">
         <PlannedInterview />
     </Route>
     <Route path="/profile/:userId(\d+)">
@@ -39,6 +42,15 @@ export const ApplicationViews = () => {
     </Route>
     <Route path="/institutions/:institutionId(\d+)">
         <InstitutionDetails />
+    </Route>
+    <Route path="/interviews/:interviewId(\d+)/edit">
+        <EditInterviewForm />
+    </Route>
+    <Route path="/projects/:projectId(\d+)/newquestion">
+        <QuestionForm />
+    </Route>
+    <Route path="/interviews/:interviewId(\d+)/conduct">
+        <ConductInterviewForm />
     </Route>
     </>
   )

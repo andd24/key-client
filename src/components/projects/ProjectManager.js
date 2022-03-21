@@ -85,11 +85,31 @@ export const unPublishProject = (id) => {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }
     })
-        .then(getSingleProject(id))
 }
 
 export const getPublishedProjects= () => {
-    return fetch(`http://localhost:8000/posts?published=True`, {
+    return fetch(`http://localhost:8000/projects?public=True`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}
+
+export const addConclusions = (conclusions, id) => {
+    return fetch(`http://localhost:8000/projects/${id}/conclusions`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        },
+        body: JSON.stringify(conclusions)
+    })
+        .then(getProjects)
+}
+
+export const getCompletedProjectsByUser = (userId) => {
+    return fetch(`http://localhost:8000/projects?user_id=${userId}&public=True`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }

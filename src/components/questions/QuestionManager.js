@@ -57,3 +57,12 @@ export const searchQuestions = (searchTerm) => {
     })
         .then(res => res.json())
 }
+
+export const getQuestionsByProject= (projectId) => {
+    return fetch(`http://localhost:8000/questions?project_id=${projectId}`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}

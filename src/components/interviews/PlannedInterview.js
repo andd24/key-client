@@ -26,13 +26,15 @@ export const PlannedInterview = () => {
             return (
                 <div>{question.question}</div>
         )})}
-
+        <div>Notes: {interview.notes} </div>
+        <button><Link to={`/interviews/${interviewId}/edit`}>Edit Interview</Link></button>
         <button className="button mr-3 my-3" onClick={() => {
                     deleteInterview(interview.id)
                         .then(setInterview)
                         .then(() => {history.push(`/projects/${interview.project?.id}`)})
                 }}>Delete Interview</button>
-
+        <button onClick={() => history.push(`/projects/${interview.project.id}`)}>Back to Project</button>
+        <button><Link to={`/interviews/${interviewId}/conduct`}>CONDUCT INTERVIEW</Link></button>
         </section>
-    )
+    )   
 }
