@@ -1,12 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams, Link, useHistory } from "react-router-dom"
-import { createQuestion } from "./QuestionManager"
+import { createQuestion, deleteQuestion, getQuestionsByProject } from "./QuestionManager"
 
 export const QuestionForm = () => {
     const [newQuestion, setNewQuestion] = useState("")
     const { projectId } = useParams()
+    const [questions, setQuestions] = useState([])
     const history = useHistory()
-    
+
+    useEffect(() => {
+        getQuestionsByProject(projectId).then(setQuestions)
+    }, [projectId])
+
+//not refreshing questions array on submit 
     const submitNewQuestion = (evt) => {
         evt.preventDefault()
         const newQuestionObject = {
@@ -16,7 +22,12 @@ export const QuestionForm = () => {
 
         createQuestion(newQuestionObject)
             .then(() => {setNewQuestion("")})
-            
+        getQuestionsByProject(projectId).then(q => setQuestions(q))
+    }
+    
+    const removeQuestion = (questionId) => {
+        deleteQuestion(questionId)
+        .then(setQuestions)
     }
 
     return (
@@ -42,8 +53,15 @@ export const QuestionForm = () => {
                 <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewQuestion}>Add question</button>
                 <button onClick={() => {history.push(`/projects/${projectId}`)}}>Cancel</button>
             </form>
-            <h3>Edit or Delete Questions</h3>
-            
+            <h3>Delete Questions</h3>
+            {
+                questions.map((question) => {
+                    return <>
+                    <div>{question.question}</div>
+                    <button onClick={() => {removeQuestion(question.id)}}>Delete Question</button>
+                    </>
+                })
+            }
         </>
     )
 }       

@@ -116,3 +116,21 @@ export const getCompletedProjectsByUser = (userId) => {
     })
         .then(res => res.json())
 }
+
+export const getPublishedProjectsByField = (fieldId) => {
+    return fetch(`http://localhost:8000/projects?user_id=${fieldId}&public=True`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}
+
+export const getPublishedProjectsByTitle = (search) => {
+    return fetch(`http://localhost:8000/projects?q=${search}&public=True`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}

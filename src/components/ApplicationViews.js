@@ -52,6 +52,9 @@ export const ApplicationViews = () => {
     <Route path="/interviews/:interviewId(\d+)/conduct">
         <ConductInterviewForm />
     </Route>
+    <Route path="/projects/view/:projectId(\d+)">
+        <FinalProject />
+    </Route>
     </>
   )
 }
