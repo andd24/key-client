@@ -26,6 +26,7 @@ export const createQuestion = (question) => {
     }
     return fetch(`http://localhost:8000/questions`, fetchOptions)
         .then(res => res.json())
+        .then(getQuestions)
 }
 
 export const updateQuestion = (question, id) => {
@@ -49,8 +50,8 @@ export const deleteQuestion = questionId => {
     }).then(getQuestions)
 };
 
-export const searchQuestions = (searchTerm) => {
-    return fetch(`http://localhost:8000/questions?q=${searchTerm}`, {
+export const searchQuestions = (searchTerm, projectId) => {
+    return fetch(`http://localhost:8000/questions?q=${searchTerm}&project_id=${projectId}`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }

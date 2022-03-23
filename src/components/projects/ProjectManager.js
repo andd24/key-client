@@ -118,7 +118,7 @@ export const getCompletedProjectsByUser = (userId) => {
 }
 
 export const getPublishedProjectsByField = (fieldId) => {
-    return fetch(`http://localhost:8000/projects?user_id=${fieldId}&public=True`, {
+    return fetch(`http://localhost:8000/projects?field_id=${fieldId}&public=True`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("key_token")}`
         }

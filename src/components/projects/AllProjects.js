@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { getProjects, getProjectsByUser, getPublishedProjects } from "./ProjectManager"
 import { getCurrentUser } from "../users/UserManager"
-import Project from "./ProjectDetails"
+import { Project } from "./Project"
 import { ProjectFilters } from "./ProjectFilters"
+import "./Project.css"
 
 export const AllProjects = () => {
     const [projects, setProjects] = useState([])
@@ -13,14 +14,12 @@ export const AllProjects = () => {
 
     return (
         <>
-        <ProjectFilters setProjects={setProjects} />
         <h1>Browse Published Projects</h1>
+        <ProjectFilters setProjects={setProjects} />
         {projects.map((project) => {
-            return (
-                    <div>{project.title}</div>
-                )
-            }
-        )}
+                  return  <Project project={project} />
+        })
+        }
         </>
     )
 }

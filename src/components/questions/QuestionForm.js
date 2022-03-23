@@ -10,9 +10,8 @@ export const QuestionForm = () => {
 
     useEffect(() => {
         getQuestionsByProject(projectId).then(setQuestions)
-    }, [projectId])
+    }, [questions.length])
 
-//not refreshing questions array on submit 
     const submitNewQuestion = (evt) => {
         evt.preventDefault()
         const newQuestionObject = {
@@ -21,18 +20,18 @@ export const QuestionForm = () => {
         }
 
         createQuestion(newQuestionObject)
-            .then(() => {setNewQuestion("")})
-        getQuestionsByProject(projectId).then(q => setQuestions(q))
+        .then(getQuestionsByProject(projectId)).then(setQuestions)
+        .then(setNewQuestion(""))
     }
     
     const removeQuestion = (questionId) => {
         deleteQuestion(questionId)
-        .then(setQuestions)
+        .then(getQuestionsByProject(projectId)).then(setQuestions)
     }
 
     return (
         <>
-        <h3>Add new Question</h3>
+        <h3>Manage questions for your interviews</h3>
         <form>
                 <div className="field my-5">
                     <label className="label"></label>
@@ -53,7 +52,8 @@ export const QuestionForm = () => {
                 <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewQuestion}>Add question</button>
                 <button onClick={() => {history.push(`/projects/${projectId}`)}}>Cancel</button>
             </form>
-            <h3>Delete Questions</h3>
+        <h3>Questions</h3>
+        <div>
             {
                 questions.map((question) => {
                     return <>
@@ -62,6 +62,10 @@ export const QuestionForm = () => {
                     </>
                 })
             }
+        </div>
+        <div>
+            <button><Link to={`/projects/${projectId}`}>Back to project</Link></button>
+        </div>
         </>
     )
 }       

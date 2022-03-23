@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { getCompletedProjectsByUser, getProjects, getProjectsByUser } from "./ProjectManager"
 import { getCurrentUser } from "../users/UserManager"
 import Project from "./ProjectDetails"
+import "./Project.css"
 
 export const ProjectDashboard = () => {
     const [user, setUser] = useState({})
@@ -22,6 +23,7 @@ export const ProjectDashboard = () => {
 
     return (
         <>
+        <div className="parent">
         <h1>Project Dashboard</h1>
         <Link to="/projects/new"><button>Start a new project</button></Link>
         <h2>In progress</h2>
@@ -39,6 +41,7 @@ export const ProjectDashboard = () => {
                 <div><Link to={`/projects/${completed.id}`}>{completed.title}</Link></div> 
             )
         })}
+        </div>
         </>
     )
 }

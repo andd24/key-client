@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useHistory, Link } from "react-router-dom"
-import { getSingleInterview, updateInterview } from "./InterviewManager"
+import { getInterviewQuestionsByInterview, getSingleInterview, updateInterview } from "./InterviewManager"
 import { getQuestionsByProject, searchQuestions } from "../questions/QuestionManager"
 
 export const EditInterviewForm = () => {
     const history = useHistory()
     const { interviewId } = useParams()
-    const [questions, setQuestions] = useState([])
     const [search, setSearch] = useState("")
+    const [storedInterview, setStoredInterview] = useState({})
     const [projectId, setProjectId] = useState("")
     const [interview, setInterview] = useState({
         project: 0,
@@ -17,8 +17,11 @@ export const EditInterviewForm = () => {
         questions: new Set(),
         notes: ""
     })
+    const [questions, setQuestions] = useState([])
+
 
     useEffect(() => {
+        
         getSingleInterview(interviewId).then((newInterview) => {
             setInterview({
                 project: newInterview.project.id,
@@ -28,24 +31,15 @@ export const EditInterviewForm = () => {
                 questions: new Set(newInterview.questions.map(question => question.id)),
                 notes: newInterview.notes
             })
-            setProjectId(newInterview.project.id)
         })
     }, [interviewId])
 
-    useEffect(() => {
-        if (search !== "") {
-            searchQuestions(search)
-                .then(setQuestions)
-        }
-        else {
-            getQuestionsByProject(projectId).then(setQuestions)
-        }
-    }, [search])
+
 
     const editInterview = (evt) => {
         evt.preventDefault()
         const updatedInterview = {
-            project: projectId,
+            project: interview.project,
             subject: interview.subject,
             location: interview.location,
             scheduled_date: interview.scheduled_date,
@@ -119,7 +113,7 @@ export const EditInterviewForm = () => {
                             } ></textarea>
                     </div>
                 </div>
-                <h3>Questions</h3>
+                {/* <h3>Questions</h3>
                 <div>Search  questions:</div>
                 <div className="panel-block">
                         <input className="input" type="text"
@@ -152,7 +146,7 @@ export const EditInterviewForm = () => {
                     </label>
                 </div>
                     )
-                })}
+                })} */}
                 <h3>Notes</h3>
                 <label className="label"></label>
                     <div className="control">
@@ -169,7 +163,6 @@ export const EditInterviewForm = () => {
                                 }
                             } />
                     </div>
-                <button><Link to={`/projects/${interview.project}/newquestion`}>Manage Questions</Link></button>
                 <div>
                     <button className="button is-link my-5 has-text-weight-bold" onClick={editInterview}>Save</button>
                 </div>

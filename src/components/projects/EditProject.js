@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from "react"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { getFields } from "../fields/FieldManager"
-import { createProject } from "./ProjectManager"
+import { createProject, getSingleProject, updateProject } from "./ProjectManager"
 import "./Project.css"
 
-export const ProjectForm = () => {
+export const EditProject = () => {
     const history = useHistory()
+    const { projectId } = useParams()
     const [fields, setFields] = useState([])
     const [project, setProject] = useState({
         fieldId: 0,
         title: "",
         imgurl: "",
-        description: ""
+        description: "",
+        conclusions: ""
     })
 
     useEffect(
@@ -21,23 +23,37 @@ export const ProjectForm = () => {
         []
     )
 
-    const submitNewProject = (evt) => {
+    useEffect(() => {
+        getSingleProject(projectId).then((newProject) => {
+            setProject({
+                field: newProject.field.id,
+                title: newProject.title,
+                imgurl: newProject.imgurl,
+                description: newProject.description,
+                conclusions: newProject.conclusions
+            })
+        })
+
+    }, [projectId])
+
+    const editProject = (evt) => {
         evt.preventDefault()
-        const newProject = {
-            field: parseInt(project.fieldId),
+        const editedProject = {
+            field: project.field,
             title: project.title,
             imgurl: project.imgurl,
-            description: project.description
+            description: project.description,
+            conclusions: project.conclusions
         }
 
-        createProject(newProject)
-            .then(() => {history.push("/projects")})
+        updateProject(editedProject, projectId)
+            .then(() => {history.push(`/projects/${projectId}`)})
             
     }
 
     return (
         <div className="container m-6 p-6 has-background-link-light">
-            <h1 className="title is-3">Create a Project</h1>
+            <h1 className="title is-3">Edit Project</h1>
             <form >
                 <div className="field my-5">
                     <label className="label">Title </label>
@@ -47,6 +63,7 @@ export const ProjectForm = () => {
                             placeholder="Title"
                             className="input"
                             required autoFocus
+                            value={project.title}
                             onChange={
                                 (evt) => {
                                     const copy = { ...project }
@@ -62,6 +79,7 @@ export const ProjectForm = () => {
                         <input
                             type="text"
                             className="input"
+                            value={project.imgurl}
                             placeholder="Image URL" onChange={
                                 (evt) => {
                                     const copy = { ...project }
@@ -77,6 +95,7 @@ export const ProjectForm = () => {
                         <textarea
                             className="textarea"
                             placeholder="description" 
+                            value={project.description}
                             onChange={
                                 (evt) => {
                                     const copy = { ...project }
@@ -91,10 +110,12 @@ export const ProjectForm = () => {
                     <div className="control">
                         <div className="select">
                             <select
+                                value={project.field}
+                                selected={project.field}
                                 onChange={
                                     (evt) => {
                                         const copy = { ...project }
-                                        copy.fieldId = evt.target.value
+                                        copy.field = evt.target.value
                                         setProject(copy)
                                     }
                                 }>
@@ -108,8 +129,24 @@ export const ProjectForm = () => {
                         </div>
                     </div>
                 </div>
+                <div className="field my-5">
+                    <label className="label">Conclusion</label>
+                    <div className="control">
+                        <textarea
+                            className="textarea"
+                            placeholder="conclusion" 
+                            value={project.conclusions}
+                            onChange={
+                                (evt) => {
+                                    const copy = { ...project }
+                                    copy.conclusions = evt.target.value
+                                    setProject(copy)
+                                }
+                            } ></textarea>
+                    </div>
+                </div>
                 <div>
-                    <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewProject}>Submit</button>
+                    <button className="button is-link my-5 has-text-weight-bold" onClick={editProject}>Save</button>
                 </div>
             </form>
         </div>

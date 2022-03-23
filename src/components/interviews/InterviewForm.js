@@ -19,7 +19,7 @@ export const InterviewForm = () => {
 
     useEffect(() => {
         if (search !== "") {
-            searchQuestions(search)
+            searchQuestions(search, projectId)
                 .then(setQuestions)
         }
         else {
@@ -52,6 +52,42 @@ export const InterviewForm = () => {
         <div className="container m-6 p-6 has-background-link-light">
             <h1 className="title is-3">Set up an Interview</h1>
             <form >
+                <h3>Questions</h3>
+                { questions.length > 0
+                ? <><div>Search  questions:</div>
+                <div className="panel-block">
+                        <input className="input" type="text"
+                            placeholder="Start typing question here"
+                            name="search"
+                            onKeyUp={
+                                (event) => {
+                                    const copy = event.target.value
+                                    setSearch(copy)
+                                }
+                            } />
+                </div>
+                { questions.map((question) => {
+                    return ( <div key={`question--${question.id}`} className="control my-2">
+                    <label className="checkbox has-text-weight-medium">
+                        <input
+                            type="checkbox"
+                            className="mr-2"
+                            name="question"
+                            value={question.id}
+                            onChange={(evt) => {
+                                const copy = { ...interview }
+                                copy.questionIds.has(parseInt(evt.target.value))
+                                    ? copy.questionIds.delete(parseInt(evt.target.value))
+                                    : copy.questionIds.add(parseInt(evt.target.value))
+                                setInterview(copy)
+                            }} />
+                        {question.question}
+                    </label>
+                </div>
+                    )
+                })} </>
+                : ""
+            }
                 <h3>Details</h3>
                 <div className="field my-5">
                     <label className="label">Subject</label>
@@ -90,7 +126,7 @@ export const InterviewForm = () => {
                     <label className="label">Proposed Date</label>
                     <div className="control">
                         <textarea
-                            className="textarea"
+                            className="text"
                             placeholder="scheduled date" 
                             onChange={
                                 (evt) => {
@@ -101,39 +137,7 @@ export const InterviewForm = () => {
                             } ></textarea>
                     </div>
                 </div>
-                <h3>Questions</h3>
-                <div>Search  questions:</div>
-                <div className="panel-block">
-                        <input className="input" type="text"
-                            placeholder="Start typing question here"
-                            name="search"
-                            onKeyUp={
-                                (event) => {
-                                    const copy = event.target.value
-                                    setSearch(copy)
-                                }
-                            } />
-                </div>
-                { questions.map((question) => {
-                    return ( <div key={`question--${question.id}`} className="control my-2">
-                    <label className="checkbox has-text-weight-medium">
-                        <input
-                            type="checkbox"
-                            className="mr-2"
-                            name="question"
-                            value={question.id}
-                            onChange={(evt) => {
-                                const copy = { ...interview }
-                                copy.questionIds.has(parseInt(evt.target.value))
-                                    ? copy.questionIds.delete(parseInt(evt.target.value))
-                                    : copy.questionIds.add(parseInt(evt.target.value))
-                                setInterview(copy)
-                            }} />
-                        {question.question}
-                    </label>
-                </div>
-                    )
-                })}
+                <div>
                 <label className="label">Notes </label>
                     <div className="control">
                         <input
@@ -148,7 +152,7 @@ export const InterviewForm = () => {
                                 }
                             } />
                     </div>
-                <button><Link to={`/projects/${interview.project}/newquestion`}>Manage Questions</Link></button>
+                </div>
                 <div>
                     <button className="button is-link my-5 has-text-weight-bold" onClick={submitNewInterview}>Submit</button>
                 </div>

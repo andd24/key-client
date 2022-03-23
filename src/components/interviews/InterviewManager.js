@@ -97,3 +97,33 @@ export const getCompletedInterviewsByProject = (projectId) => {
     })
         .then(res => res.json())
 }
+
+export const getPlannedInterviewsByProject = (projectId) => {
+    return fetch(`http://localhost:8000/interviews?project_id=${projectId}&planned=True`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}
+
+export const getInterviewQuestionsByInterview= (interviewId) => {
+    return fetch(`http://localhost:8000/interviewquestions?interview_id=${interviewId}&complete=True`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        }
+    })
+        .then(res => res.json())
+}
+
+export const addNotes = (id, note) => {
+    return fetch(`http://localhost:8000/interviews/${id}/note`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("key_token")}`
+        },
+        body: JSON.stringify(note)
+    })
+    .then(getInterviews)
+}
