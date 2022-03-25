@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { getFields } from "../fields/FieldManager"
 import { getUsers } from "../users/UserManager"
 import { getCompletedProjectsByUser, getPublishedProjects, getPublishedProjectsByField, getPublishedProjectsByTitle } from "./ProjectManager"
-import "./Project.css"
+
 
 export const ProjectFilters = ({ setProjects }) => {
     const [fields, setFields] = useState([])

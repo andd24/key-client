@@ -26,7 +26,7 @@ export const Login = () => {
             .then(res => {
                 if ("valid" in res && res.valid && "token" in res) {
                     localStorage.setItem("key_token", res.token)
-                    history.push("/")
+                    history.push("/projects")
                 }
                 else {
                     invalidDialog.current.showModal()
@@ -38,10 +38,9 @@ export const Login = () => {
         <main className="columns container pl-2 is-centered">
             <dialog ref={invalidDialog}>
                 <div>Username or password was not valid.</div>
-                <button className="delete" onClick={e => invalidDialog.current.close()}>Close</button>
+                <button className="button" onClick={e => invalidDialog.current.close()}>Close</button>
             </dialog>
             <form className="column mt-6 is-two-thirds" onSubmit={handleLogin}>
-                <h1 className="title">Key</h1>
                 <h2 className="subtitle pt-2">Please sign in</h2>
                 <fieldset className="field mb-5">
                     <label htmlFor="inputUsername" className="label"> Username address </label>

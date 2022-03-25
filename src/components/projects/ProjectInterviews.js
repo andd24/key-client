@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { getCompletedInterviewsByProject } from "../interviews/InterviewManager"
-import "./Project.css"
 
 export const ProjectInterviews = ({projectId}) => {
     const [interviews, setInterviews] = useState([])
@@ -12,7 +11,7 @@ export const ProjectInterviews = ({projectId}) => {
 
     return (
         <>
-        <h2>Interviews</h2>
+        <div className="title is-4">Interviews</div>
         {
             interviews.map((interview) => {
                 return <div><Link to={`/interviews/${interview.id}/view`}>{interview.subject}</Link></div>

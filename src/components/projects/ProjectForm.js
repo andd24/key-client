@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { getFields } from "../fields/FieldManager"
 import { createProject } from "./ProjectManager"
-import "./Project.css"
+
 
 export const ProjectForm = () => {
     const history = useHistory()

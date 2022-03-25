@@ -100,8 +100,8 @@ export const EditInterviewForm = () => {
                 <div className="field my-5">
                     <label className="label">Proposed Date</label>
                     <div className="control">
-                        <textarea
-                            className="textarea"
+                        <input
+                            type="date"
                             placeholder="scheduled date" 
                             value={interview.scheduled_date}
                             onChange={
@@ -110,7 +110,7 @@ export const EditInterviewForm = () => {
                                     copy.scheduled_date = evt.target.value
                                     setInterview(copy)
                                 }
-                            } ></textarea>
+                            } ></input>
                     </div>
                 </div>
                 {/* <h3>Questions</h3>

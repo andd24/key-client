@@ -49,51 +49,53 @@ export const ConductInterviewForm = () => {
 
     return (
         <>
-        <h1>Conduct Interview</h1>
-        {interviewQuestions.map(interviewQuestion => {
-            return ( 
-                // <Link to={`/interviews/conduct/${interviewQuestion.id}`}>Start </Link>
-                <>
-                <div>{interviewQuestion.question.question}</div>
-                { interviewQuestion.answer === "" 
-                    ? <form>
-                    <label className="label"></label>
-                    <input
-                        type="textarea"
-                        placeholder="answer"
-                        className="input"
-                        onChange={
-                            (evt) => {
-                                const copy = evt.target.value
-                                setAnswer(copy)
-                            }
-                        } />
-                    <button onClick={() => { addAnswer(answer, interviewQuestion.id) }}>Save</button>
-                    </form>
-                    : <div>{interviewQuestion.answer}</div>
-                }
-                
-                </>
-            )
-        })
-        }
-        <h4>Notes</h4>
-                <label className="label"></label>
-                    <div className="control">
+        <div className="container m-6 p-6 has-background-link-light">
+            <div className="title is-3">Conduct Interview</div>
+            {interviewQuestions.map(interviewQuestion => {
+                return ( 
+                    // <Link to={`/interviews/conduct/${interviewQuestion.id}`}>Start </Link>
+                    <>
+                    <div>{interviewQuestion.question.question}</div>
+                    { interviewQuestion.answer === "" 
+                        ? <form>
+                        <label className="label"></label>
                         <input
                             type="textarea"
+                            placeholder="answer"
                             className="input"
-                            placeholder="notes" 
-                            value={interview.notes}
                             onChange={
                                 (evt) => {
-                                    const copy = { ...interview }
-                                    copy.notes = evt.target.value
-                                    setInterview(copy)
+                                    const copy = evt.target.value
+                                    setAnswer(copy)
                                 }
                             } />
-                    </div>
-        <button onClick={finishInterview}>Conclude Interview</button>
+                        <button className="button is-small" onClick={() => { addAnswer(answer, interviewQuestion.id) }}>Save</button>
+                        </form>
+                        : <div>{interviewQuestion.answer}</div>
+                    }
+                    
+                    </>
+                )
+            })
+            }
+            <div className="title is-5 mt-5">Notes</div>
+                    <label className="label"></label>
+                        <div className="control">
+                            <textarea
+                                type="textarea"
+                                className="textarea"
+                                placeholder="notes" 
+                                value={interview.notes}
+                                onChange={
+                                    (evt) => {
+                                        const copy = { ...interview }
+                                        copy.notes = evt.target.value
+                                        setInterview(copy)
+                                    }
+                                } />
+                        </div>
+            <button className="button mt-5" onClick={finishInterview}>Conclude Interview</button>
+        </div>
         </>
     )
 }

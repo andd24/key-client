@@ -41,7 +41,7 @@ export const Register = () => {
                 .then(res => {
                     if ("token" in res) {
                         localStorage.setItem("key_token", res.token)
-                        history.push("/")
+                        history.push("/projects")
                     }
                 })
         } else {
@@ -56,7 +56,7 @@ export const Register = () => {
 
             <dialog ref={passwordDialog}>
                 <div>Passwords do not match</div>
-                <button className="delete" onClick={e => passwordDialog.current.close()}>Close</button>
+                <button className="button" onClick={e => passwordDialog.current.close()}>Close</button>
             </dialog>
             <form className="column mt-6 is-two-thirds" onSubmit={handleRegister}>
                 <h1 className="title">Register an account</h1>

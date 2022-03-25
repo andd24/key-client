@@ -16,25 +16,27 @@ export const PlannedInterview = () => {
     }, [interviewId])
 
     return (
-        <section className="message is-info m-5">
-        <h1>{interview.scheduled_date}</h1>
-        {/* <div>
-            <img src={project.imgurl}></img>
-        </div> */}
-        <div>{interview.subject} @ {interview.location}</div>
-        {interview.questions?.map((question) => {
-            return (
-                <div>{question.question}</div>
-        )})}
-        <div>Notes: {interview.notes} </div>
-        <button><Link to={`/interviews/${interviewId}/edit`}>Edit Interview</Link></button>
-        <button className="button mr-3 my-3" onClick={() => {
+        <section className="message is-light m-6   ">
+            <div className="message-header">
+                <div className="title is-3">{interview.subject} @ {interview.location}</div>
+                <button className="delete mr-3 my-3" onClick={() => {
                     deleteInterview(interview.id)
                         .then(setInterview)
                         .then(() => {history.push(`/projects/${interview.project?.id}`)})
                 }}>Delete Interview</button>
-        <button onClick={() => history.push(`/projects/${interview.project.id}`)}>Back to Project</button>
-        <button><Link to={`/interviews/${interviewId}/conduct`}>CONDUCT INTERVIEW</Link></button>
+            </div> 
+            <div className="message-body">
+                <div className="title is-4">Scheduled date: {interview.scheduled_date}</div>
+                {interview.questions?.map((question) => {
+                    return (
+                        <div className="title is-6 m-3">{question.question}</div>
+                )})}
+                <div className="title is-5 mt-5">Notes: {interview.notes} </div>
+                <button className="button"><Link to={`/interviews/${interviewId}/edit`}>Edit Interview</Link></button>
+
+                <button className="button"><Link to={`/interviews/${interviewId}/conduct`}>CONDUCT INTERVIEW</Link></button>
+                <button className="button" onClick={() => history.push(`/projects/${interview.project.id}`)}>Back to Project</button>
+            </div>
         </section>
     )   
 }

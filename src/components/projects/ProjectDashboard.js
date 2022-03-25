@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { getCompletedProjectsByUser, getProjects, getProjectsByUser } from "./ProjectManager"
 import { getCurrentUser } from "../users/UserManager"
-import Project from "./ProjectDetails"
-import "./Project.css"
+import { Project } from "./Project"
+
 
 export const ProjectDashboard = () => {
     const [user, setUser] = useState({})
@@ -23,24 +23,37 @@ export const ProjectDashboard = () => {
 
     return (
         <>
-        <div className="parent">
-        <h1>Project Dashboard</h1>
-        <Link to="/projects/new"><button>Start a new project</button></Link>
-        <h2>In progress</h2>
-        {projects.map((project) => {
-            if (project.public != true) {
-                return (
-                    <div><Link to={`/projects/${project.id}`}>{project.title}</Link></div>
-                )
-            }
-        }
-        )}
-        <h2>Complete</h2>
-        {completed.map((completed) => {
-            return (
-                <div><Link to={`/projects/${completed.id}`}>{completed.title}</Link></div> 
-            )
-        })}
+         <div className="container m-6 p-6 has-background-link-light">
+        <div className="box">
+            <div className="title is-2">Your Projects</div>
+            <button className="button mb-5"><Link to="/projects/new">Start a new project</Link></button>
+            <div className="box">
+                <div className="title is-4">In progress</div>
+                {projects.map((project) => {
+                    if (project.public != true) {
+                        return (
+                            <><Link to={`/projects/${project.id}`}><Project project={project} /></Link>
+                            {/* // <div><Link to={`/projects/${project.id}`}>{project.title}</Link></div> */}
+                            </>
+                        )
+                    }
+                }
+                 )}
+            </div>
+            <div className="box">
+                <div className="title is-4">Complete</div>
+                {projects.map((project) => {
+                    if (project.public === true) {
+                        return (
+                          <><Link to={`/projects/${project.id}`}><Project project={project} /></Link>
+                            {/* // <div><Link to={`/projects/${project.id}`}>{project.title}</Link></div> */}
+                            </>
+                        )
+                    }
+                }
+                 )}
+            </div>
+        </div>
         </div>
         </>
     )

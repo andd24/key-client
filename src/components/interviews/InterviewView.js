@@ -14,6 +14,10 @@ export const InterviewView = () => {
 
     return (
         <>
+        <div className="container m-6 p-6 has-background-link-light">
+
+
+        </div>
         <h3>Interview with {interview.subject}</h3>
         <h4>{interview.location} on {interview.collection_date}</h4>
         {interviewquestions.map((iq) => {

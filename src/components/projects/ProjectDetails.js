@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom"
 import { Link, useHistory } from "react-router-dom"
 import { getCompletedInterviewsByProject, getInterviewsByProject, getPlannedInterviewsByProject } from "../interviews/InterviewManager"
 import { addConclusions, deleteProject, getSingleProject, publishProject, unPublishProject } from "./ProjectManager"
-import "./Project.css"
 import { getQuestionsByProject } from "../questions/QuestionManager"
 
 export const ProjectDetails = () => {
@@ -55,64 +54,83 @@ export const ProjectDetails = () => {
 
 
     return (
-        <section className="message is-info m-5">
-        <h1>{project.title}</h1>
-        { project.imgurl != ""
-        ?  <img src={project.imgurl}></img>
-        : ""
-        }
-        <div><h5>{project.description}</h5></div>
-        <div>
-        <button><Link to={`/projects/${project.id}/questions`}>Manage Questions</Link></button>
-        </div>
-        { questions.length > 0
-        ? <><button><Link to={`/projects/new_interview/${project.id}`}>Plan an interview</Link></button></>
-        : ""
-        }
-        
-        <h2>Planned Interviews</h2>
-        {
-        interviews.map(interview => {
-            if (interview.complete === false) {
-                return <div><Link to={`/interviews/${interview.id}`}>{interview.scheduled_date}</Link></div>
-            }
-        })
-    }
-        <h2>Completed Interviews</h2>
-        {
-        interviews.map(interview => {
-            if (interview.complete === true) {
-                return <div><Link to={`/interviews/${interview.id}/complete`}>{interview.collection_date}</Link></div>
-            }
-        })
-    }
-        { project.conclusions === ""
-        ? <form>
-        <h3>Conclusions</h3>
-        <label className="label"></label>
-            <input
-                type="textarea"
-                placeholder="conclusions"
-                className="input"
-                required autoFocus
-                onChange={
-                    (evt) => {
-                        const copy = evt.target.value
-                        setConclusions(copy)
+        <div className="container m-6 p-6 has-background-link-light">
+        <section className="box">
+        <div className="card is-light">
+            <div className="card-header">
+                <div className="card-header-title">
+                    <div className="title is-2">{project.title}</div>
+                </div>
+            </div>
+            <div className="card-image"> 
+                    { project.imgurl != ""
+                ?  <img src={project.imgurl}></img>
+                : ""
+                }
+            </div>
+            <div className="card-content">
+                <div className="title is-4">{project.description}</div>
+            </div>
+            <div className="card-footer">
+                <button className="button mr-3 my-3"><Link to={`/projects/${project.id}/questions`}>Manage Questions</Link></button>
+                
+                { questions.length > 0
+                ? <><button className="button mr-3 my-3"><Link to={`/projects/new_interview/${project.id}`}>Plan an interview</Link></button></>
+                : ""
+                }
+            </div>
+            <div className="card-content">
+                <div className="title is-4">Planned Interviews</div>
+                {
+                interviews.map(interview => {
+                    if (interview.complete === false) {
+                        return <div><Link to={`/interviews/${interview.id}`}>{interview.scheduled_date}</Link></div>
                     }
-                } />
-        <button onClick={() => { addConclusions(conclusions, projectId) }}>Save</button>
-        </form>
-        : <div>Conclusions: {project.conclusions}</div>
-        }
-        
-        {publishButton()}
-        <button><Link to={`/projects/${projectId}/edit`}>Edit Project</Link></button>
-        <button className="button mr-3 my-3" onClick={() => {
-                    deleteProject(project.id)
-                        .then(setProject)
-                        .then(() => {history.push("/projects")})
-                }}>Delete Project</button>
+                })
+            }
+                <div className="title is-4 my-3">Completed Interviews</div>
+                {
+                interviews.map(interview => {
+                    if (interview.complete === true) {
+                        return <div><Link to={`/interviews/${interview.id}/complete`}>{interview.collection_date}</Link></div>
+                    }
+                })
+            }
+                { project.conclusions === ""
+                ? <form>
+                <div className="title is-4">Conclusions</div>
+                <label className="label"></label>
+                    <input
+                        type="textarea"
+                        placeholder="conclusions"
+                        className="input"
+                        required autoFocus
+                        onChange={
+                            (evt) => {
+                                const copy = evt.target.value
+                                setConclusions(copy)
+                            }
+                        } />
+                <button className="button" onClick={() => { addConclusions(conclusions, projectId) }}>Save</button>
+                </form>
+                : <><div className="title is-4 mt-5">Conclusions</div> 
+                <div className="title is-5">{project.conclusions}</div></>
+                }
+            </div>
+            <div className="card-footer">
+                {publishButton()}
+                { project.public === true
+                ? ""
+                : <button className="button mr-3 my-3"><Link to={`/projects/${projectId}/edit`}>Edit Project</Link></button>
+                }
+                <button className="button mr-3 my-3" onClick={() => {
+                            deleteProject(project.id)
+                                .then(setProject)
+                                .then(() => {history.push("/projects")})
+                        }}>Delete Project</button>
+            </div> 
+        </div>
         </section>
+    </div>
     )
 }

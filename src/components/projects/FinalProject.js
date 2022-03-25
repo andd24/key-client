@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { ProjectInterviews } from "./ProjectInterviews"
 import { getSingleProject } from "./ProjectManager"
-import "./Project.css"
+
 
 export const FinalProject = () => {
     const { projectId } = useParams()
@@ -14,15 +14,27 @@ export const FinalProject = () => {
 
     return (
         <>
-        <h3>{project.title}</h3>
-        <h4>by {project.user?.user?.first_name} {project.user?.user?.last_name}</h4>
-        <img src={project.imgurl} />
-        <div>{project.description}</div>
-        <div>
-            <ProjectInterviews projectId={projectId} />
+        <div className="box">
+            <div className="card">
+                <div className="card-header">
+                    <div className="card-title">
+                        <div className="title is-3">{project.title}</div>
+                        <div className="title is-5">by {project.user?.user?.first_name} {project.user?.user?.last_name}</div>
+                    </div>
+                </div>
+                <div className="card-image">
+                    <img src={project.imgurl} />
+                </div>
+                <div className="card-content">
+                    <div className="title is-5">{project.description}</div>
+                    <div>
+                        <ProjectInterviews projectId={projectId} />
+                    </div>
+                    <div className="title is-4 my-5">In conclusion</div>
+                    <div className="title is-6">{project.conclusions}</div>
+                </div>
+            </div>    
         </div>
-        <h5>In conclusion</h5>
-        <div>{project.conclusions}</div>
         </>
     )
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { getFields } from "../fields/FieldManager"
 import { createProject, getSingleProject, updateProject } from "./ProjectManager"
-import "./Project.css"
+
 
 export const EditProject = () => {
     const history = useHistory()
